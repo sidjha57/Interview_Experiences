@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import Editor from '../editor/Editor.js'
+import { useLocation } from 'react-router-dom';
+import Editor from '../editor/Editor.js';
+import moment from "moment";
+
 
 const Write = () => {
+  const state = useLocation().state;
   // const [value, setValue] = useState('');
 
   // console.log(value);
