@@ -1,21 +1,75 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import Editor from '../editor/Editor.js';
+import {  useLocation, useNavigate } from 'react-router-dom';
+import Editor, {desc} from '../editor/Editor.js';
+import EditorToolbar, { modules, formats } from "../editor/EditorToolbar.js";
 import moment from "moment";
+import { useEffect } from 'react';
+import ReactQuill from 'react-quill';
+import axios from 'axios';
 
 
 const Write = () => {
+  const navigate = useNavigate();
   const state = useLocation().state;
-  // const [value, setValue] = useState('');
+  const [error, setError] = useState("");
+  const [values, setValues] = useState({
+    role: "",
+    company: "",
+    desc: null,
+    ctc: 0,
+    college: "",
+    type: "oncampus",
+    experience: "positive",
+    status: "accepted",
+    level: "easy",
+    cat: "",
+    img: "",
+    date: "",
+  });
 
-  // console.log(value);
+  const handleChange = e => {
+    setValues(prev =>({...prev, [e.target.name]: e.target.value})) // this updates only the object value which is changed
+  };
+
+  const handleDescChange = desc => {
+    setValues(prev => ({...prev, ["date"]: moment().format()}));
+    setValues(prev => ({...prev, ["desc"]: desc}))
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try{
+      console.log(values);
+      const res = await axios.post("/posts/", {...values});
+      // console.log(res);
+      navigate("/");
+    }catch(err){
+      setError(err.response.data);
+      console.log(err);
+      // console.log(error);
+    }
+  }
+
+//  console.log(desc);
+// console.log(error);
+  // console.log(Editor);
+  // console.log(values)
   return (
     <div className="add">
       <div className="content">
-        <input type="text" placeholder="Role Offered" />
-        <input type="text" placeholder="Company Name" />
-        <div className="editorContainer">
-          <Editor/>
+        <input type="text" placeholder="Role Offered" onChange={handleChange} name="role"/>
+        <input type="text" placeholder="Company Name" onChange={handleChange} name="company"/>
+        <div className="editorContainer" name="desc">
+          {/* <Editor /> */}
+          <EditorToolbar />
+          <ReactQuill
+            theme="snow"
+            value={values.desc}
+            onChange={handleDescChange}
+            placeholder={"Share your interview experience..."}
+            modules={modules}
+            formats={formats}
+          />
         </div>
       </div>
       <div className="menu">
@@ -33,7 +87,7 @@ const Write = () => {
           </label>
           <div className="buttons">
             <button>Save as a Draft</button>
-            <button>Update</button>
+            <button onClick={handleSubmit}>Update</button>
           </div>
         </div>
 
@@ -42,41 +96,41 @@ const Write = () => {
           <h1>Details</h1>
           <span><b>CTC Offered</b></span>
           <div className="ctc">
-            <input type="number" placeholder="CTC in LPA" />
+            <input type="number" placeholder="CTC in LPA"  onChange={handleChange} name="ctc"/>
           </div>
           <span><b>College Name</b></span>
           <div className="college">
-            <input type="text" placeholder="Sardar Patel College Of Engineering" />
+            <input type="text" placeholder="Sardar Patel College Of Engineering" onChange={handleChange} name="college"/>
           </div>
           <span><b>Type Of Placement</b></span>
           <div className="type">
-            <select name="placement" id="placement" className="type">
-              <option value="oncampus">On Campus</option>
-              <option value="offcampus">Off Campus</option>
+            <select name="type" id="placement" className="type"onChange={handleChange} >
+              <option value="On Campus">On Campus</option>
+              <option value="Off Campus">Off Campus</option>
             </select>
           </div>
           <span><b>How was your Experience?</b></span>
           <div className="experience">
-            <select name="experience" id="experience" className="experience">
-              <option value="positive">Positive</option>
-              <option value="neutral">Neutral</option>
-              <option value="negative">Negative</option>
+            <select name="experience" id="experience" className="experience"onChange={handleChange} >
+              <option value="Positive Experience">Positive</option>
+              <option value="Neutral Experience">Neutral</option>
+              <option value="Negative Experience">Negative</option>
             </select>
           </div>
           <span><b>Offer Status</b></span>
           <div className="status">
-            <select name="status" id="status" className="status">
-              <option value="accepted">Accepted Offer</option>
-              <option value="no">No Offer</option>
-              <option value="rejected">Rejected Offer</option>
+            <select name="status" id="status" className="status"onChange={handleChange}>
+              <option value="Accepted Offer">Accepted Offer</option>
+              <option value="No Offer">No Offer</option>
+              <option value="Rejected Offer">Rejected Offer</option>
             </select>
           </div>
           <span><b>Interview Level</b></span>
           <div className="status">
-            <select name="level" id="level" className="level">
-              <option value="easy">Easy</option>
-              <option value="average">Average</option>
-              <option value="difficult">Difficult</option>
+            <select name="level" id="level" className="level"onChange={handleChange} >
+              <option value="Easy Level">Easy</option>
+              <option value="Average Level">Average</option>
+              <option value="Difficult Level">Difficult</option>
             </select>
           </div>
           </div>
@@ -85,33 +139,33 @@ const Write = () => {
         <div className="item">
           <h1>Category</h1>
           <div className="cat">
-            <input type="radio" name="cat" value="banking" id="banking" />
+            <input type="radio" name="cat" value="IT" id="IT" onChange={handleChange} />
+
+            <label htmlFor="IT">IT</label>
+          </div>
+          <div className="cat">
+            <input type="radio" name="cat" value="banking" id="banking" onChange={handleChange} />
 
             <label htmlFor="banking">Banking</label>
           </div>
           <div className="cat">
-            <input type="radio" name="cat" value="banking" id="banking" />
+            <input type="radio" name="cat" value="Marketing" id="Marketing" onChange={handleChange} />
 
-            <label htmlFor="banking">Banking</label>
+            <label htmlFor="marketing">Marketing</label>
           </div>
           <div className="cat">
-            <input type="radio" name="cat" value="banking" id="banking" />
+            <input type="radio" name="cat" value="Management" id="Management" onChange={handleChange} />
 
-            <label htmlFor="banking">Banking</label>
+            <label htmlFor="management">Management</label>
           </div>
           <div className="cat">
-            <input type="radio" name="cat" value="banking" id="banking" />
+            <input type="radio" name="cat" value="finance" id="finance" onChange={handleChange} />
 
-            <label htmlFor="banking">Banking</label>
-          </div>
-          <div className="cat">
-            <input type="radio" name="cat" value="banking" id="banking" />
-
-            <label htmlFor="banking">Banking</label>
+            <label htmlFor="finance">Finance</label>
           </div>  <div className="cat">
-            <input type="radio" name="cat" value="banking" id="banking" />
+            <input type="radio" name="cat" value="other" id="other" onChange={handleChange} />
 
-            <label htmlFor="banking">Banking</label>
+            <label htmlFor="other">Other</label>
           </div>
         </div>
       </div>

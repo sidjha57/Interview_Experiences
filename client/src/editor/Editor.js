@@ -4,12 +4,15 @@ import EditorToolbar, { modules, formats } from "./EditorToolbar";
 import "react-quill/dist/quill.snow.css";
 import "./styles.css";
 
+export var desc;
+
 export const Editor = () => {
   const [state, setState] = React.useState({ value: null });
   const handleChange = value => {
+    desc = value;
     setState({ value });
   };
-  console.log(state);
+  // console.log(state);
   return (
     <div className="text-editor">
       <EditorToolbar />
@@ -21,11 +24,14 @@ export const Editor = () => {
         modules={modules}
         formats={formats}
       />
+      
     </div>
+  
   );
 };
 
 export default Editor;
+
 
 
 

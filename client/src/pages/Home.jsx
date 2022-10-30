@@ -6,19 +6,17 @@ import RightSearchBar from '../components/RightSearchBar';
 import Accepted from '../img/icons/Accepted';
 import Decline from '../img/icons/Decline';
 import Neutral from '../img/icons/Neutral';
-
+import moment from "moment";
 
 
 const Home = () => {
 
   const [posts, setPosts] = useState([])
   
-  const cat = useLocation().search;
-
+  const filter = useLocation().search;
   const fetchData = async ()=>{
     try{
-      const res = await axios.get(`/posts${cat}`);
-      // console.log(res);
+      const res = await axios.get(`/posts${filter}`);
       setPosts(res.data);
     }catch(err){
       console.log(err);
@@ -27,68 +25,12 @@ const Home = () => {
 
   useEffect(()=>{
     fetchData();
-  },[cat])
-  // console.log(posts);
+  },[filter])
 
-  //  const posts = [
-  //   {
-  //     id: 1,
-  //     role: "Associate Software Engineer",
-  //     company: "Capgemini",
-  //     ctc: 8,
-  //     college: "Sardar Patel College Of Engineering",
-  //     type: "On Campus",
-  //     experience: "Positive",
-  //     status: "Accepted",
-  //     level: "Easy",
-  //     desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
-  //     img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  //   },
-  //   {
-  //     id: 2,
-  //     role: "Finance Head",
-  //     company: "Axella",
-  //     ctc: 14,
-  //     college: "SPCE",
-  //     type: "On Campus",
-  //     experience: "Negative",
-  //     status: "No",
-  //     level: "Difficult",
-  //     desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
-  //     img: "https://images.pexels.com/photos/6489663/pexels-photo-6489663.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  //   },
-  //   {
-  //     id: 3,
-  //     role: "Data Analyst",
-  //     company: "Axis Bank",
-  //     ctc: 8,
-  //     college: "SPCE",
-  //     type: "On Campus",
-  //     experience: "Average",
-  //     status: "Rejected",
-  //     level: "Easy",
-  //     desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
-  //     img: "https://images.pexels.com/photos/4230630/pexels-photo-4230630.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  //   },
-  //   {
-  //     id: 4,
-  //     role: "Software Engineer",
-  //     company: "Carwale",
-  //     ctc: 10,
-  //     college: "SPCE",
-  //     type: "On Campus",
-  //     experience: "Positive",
-  //     status: "No",
-  //     level: "Difficult",
-  //     desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
-  //     img: "https://images.pexels.com/photos/6157049/pexels-photo-6157049.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  //   },
-  // ];
-
-//  function type (value) {
-//     if (value === "Positive" || value === "Easy" || value === "Accepted") return <Accepted />
-//     else return <Decline />
-//   }
+  function getDate (date) {
+    const d = new Date(date);
+    return d;
+  }
 
   return (
     <div className="home">
@@ -112,11 +54,11 @@ const Home = () => {
 
                 <div className="info">
                   <div className="status">
-                    {post.status === "Accepted" ? (
+                    {post.status === "accepted" ? (
                       <>
                         <Accepted /> <label>Accepted Offer</label>
                       </>
-                    ) : post.status === "Rejected" ? (
+                    ) : post.status === "rejected" ? (
                       <>
                         <Decline />
                         <label>Rejected Offer</label>
@@ -130,11 +72,11 @@ const Home = () => {
                   </div>
 
                   <div className="status">
-                    {post.experience === "Positive" ? (
+                    {post.experience === "positive" ? (
                       <>
                         <Accepted /> <label>Postive Experience</label>
                       </>
-                    ) : post.experience === "Negative" ? (
+                    ) : post.experience === "negative" ? (
                       <>
                         <Decline />
                         <label>Negative Experience</label>
@@ -148,11 +90,11 @@ const Home = () => {
                   </div>
 
                   <div className="status">
-                    {post.level === "Easy" ? (
+                    {post.level === "easy" ? (
                       <>
                         <Accepted /> <label>Easy Interview</label>
                       </>
-                    ) : post.level === "Difficult" ? (
+                    ) : post.level === "difficult" ? (
                       <>
                         <Decline />
                         <label>Difficult Interview</label>
@@ -175,13 +117,21 @@ const Home = () => {
                 </div>
                 <div className="last">
                   <button>Read More</button>
-                  <span>Posted 2 days ago</span>
+                  <span>
+                    {
+                      moment(getDate(post.date)).format('LL')
+                    }
+                  </span>
                 </div>
               </div>
             </div>
           ))}
+          
       </div>
-      <RightSearchBar />
+      <div className="rightbar">
+        <RightSearchBar />
+      </div>
+
     </div>
   );
 }

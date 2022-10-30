@@ -1,20 +1,55 @@
 import {db} from "../db.js";
 import jwt from "jsonwebtoken";
+import { response } from "express";
 
 export const getPosts = (req,res) => {
-    const q = req.query.cat
-      ? "SELECT * FROM posts WHERE cat=?"
-      : "SELECT * FROM posts";
+    
+    const q = "SELECT * FROM posts p WHERE p.college LIKE ? AND p.role LIKE ? AND p.company LIKE ? AND p.cat LIKE ? AND p.type LIKE ? AND p.experience LIKE ? AND p.status LIKE ? AND p.level LIKE ? ORDER BY p.date desc";
 
-      db.query(q,[req.query.cat], (err,data)=> {
+      const values = [
+        req.query.college ? req.query.college : "%",
+        req.query.role ? req.query.role : "%",
+        req.query.company ? req.query.company : "%",
+        req.query.cat ? req.query.cat : "%",
+        req.query.type ? req.query.type : "%",
+        req.query.experience ? req.query.experience : "%",
+        req.query.status ? req.query.status : "%",
+        req.query.level ? req.query.level : "%",
+      ]
+      console.log(req.query);
+      console.log(values);
+      db.query(q,[...values], (err,data)=> {
         if (err) return res.status(500).send(err);
 
         return res.status(200).json(data);
       })
 }
 
+export const filterPost = (req,res) => {
+  console.log(req.query)
+  const values = [
+    req.query.college ? req.query.college : "%",
+    req.query.role ? req.query.role : "%",
+    req.query.company ? req.query.company : "%",
+    req.query.cat ? req.query.cat : "%",
+    req.query.type ? req.query.type : "%",
+    req.query.experience ? req.query.experience : "%",
+    req.query.status ? req.query.status : "%",
+    req.query.level ? req.query.level : "%",
+  ]
+
+  // console.log(values);
+  const q = `SELECT DISTINCT p.${req.query.filterType} FROM posts p WHERE p.college LIKE ? AND p.role LIKE ? AND p.company LIKE ? AND p.cat LIKE ? AND p.type LIKE ? AND p.experience LIKE ? AND p.status LIKE ? AND p.level LIKE ?`
+  db.query(q,[...values], (err,data) => {
+      if (err) return res.status(500).json(err);
+
+      return res.status(200).json(data);
+  })
+
+}
+
 export const getPost = (req,res) => {
-    const q = "SELECT u.name, p.role,p.company,p.ctc,p.college,p.type,p.experience,p.status,p.level,p.desc,p.img, u.img AS userImg, p.date, p.cat, p.img FROM users u  LEFT JOIN posts p ON u.id = p.uid WHERE p.id = ?"
+    const q = "SELECT u.name, p.role,p.company,p.ctc,p.college,p.type,p.experience,p.status,p.level,p.desc,p.img, u.img AS userImg, p.date, p.cat, p.img FROM users u  LEFT JOIN posts p ON u.id = p.uid WHERE p.id = ? ORDER BY p.date desc"
 
     db.query(q,[req.params.id], (err,data) => {
       if (err) return res.status(500).send(err);
@@ -34,7 +69,7 @@ export const deletePost = (req,res) => {
     const postId = req.params.id;
 
     const q = "SELECT * FROM posts WHERE id=? AND uid=?";
-    console.log(postId,userInfo.id);
+    // console.log(postId,userInfo.id);
     db.query(q,[postId, userInfo.id], (err,data)=> {
       
       if (err) return res.status(403).json("You can delete only your post!");
@@ -48,23 +83,22 @@ export const deletePost = (req,res) => {
         return res.json("Post has been deleted!");
       })
     })
-
-    
-
   })
 }
 
 export const addPost = (req,res) => {
+
   const token = req.cookies.access_token;
   if(!token) return res.status(401).json("Not authenticated!");
 
   jwt.verify(token,"jwtkey", (err, userInfo)=>{
     if(err) return res.status(403).json("Token is not valid!");
 
-    const q = "INSERT INTO posts(`role`,`company`,`ctc`,`college`,`type`,`experience`,`status`,`level`,`desc`,`img`,`date`,`cat`) VALUES(?)";
+    const q = "INSERT INTO posts(`uid`,`role`,`company`,`ctc`,`college`,`type`,`experience`,`status`,`level`,`desc`,`img`,`date`,`cat`) VALUES(?)";
 
     const values = [
       userInfo.id,
+      req.body.role,
       req.body.company,
       req.body.ctc,
       req.body.college,
@@ -77,13 +111,15 @@ export const addPost = (req,res) => {
       req.body.date,
       req.body.cat,
     ]
-
+    // console.log(values);
     db.query(q,[values],(err,data) => {
+
       if (err) return res.status(500).json(err);
       return res.json("Post has been successfully created.");
     })
   });
 }
+
 export const updatePost = (req,res) => {
   const token = req.cookies.access_token;
   if(!token) return res.status(401).json("Not authenticated!");

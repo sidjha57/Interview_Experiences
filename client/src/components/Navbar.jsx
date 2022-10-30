@@ -17,42 +17,10 @@ const Navbar = () => {
             <img src={Logo} alt="" />
           </Link>
         </div>
-
-        <div className="search">
-          <div className="wrap">
-            <div className="search">
-              <input
-                type="text"
-                className="searchTerm"
-                placeholder="What are you looking for?"
-              />
-              <button type="submit" className="searchButton">
-                <SearchIcon className='searchIcon'/>
-                <i className="fa fa-search"></i>
-              </button>
-            </div>
-          </div>
-        </div>
+        
+   
 
         <div className="links">
-          {/* <Link className='link' to="/?cat=banking">
-            <h6>BANKING</h6>
-          </Link>
-          <Link className='link' to="/?cat=it">
-            <h6>IT</h6>
-          </Link>
-          <Link className='link' to="/?cat=finance">
-            <h6>Finance</h6>
-          </Link>
-          <Link className='link' to="/?cat=marketing">
-            <h6>Marketing</h6>
-          </Link>
-          <Link className='link' to="/?cat=management">
-            <h6>Management</h6>
-          </Link>
-          <Link className='link' to="/?cat=others">
-            <h6>Others</h6>
-          </Link> */}
           <span>{currentUser?.username}</span>
           {currentUser ? (
             <span onClick={logout}>Logout</span>

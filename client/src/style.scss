@@ -243,7 +243,7 @@ $lightGreen: #b9e7e7;
         //HOME
         .home{
             display: flex;
-            gap: 5vw;
+            gap: 1vw;
             .posts{
                 flex: 5;
                 margin-top: 50px;
@@ -370,12 +370,22 @@ $lightGreen: #b9e7e7;
 
                     
                 }
+
+                .rightbar {
+                    position: sticky;
+                }
             }
 
-            // RightSearchBar
-            .rightSearchBar{
-                flex: 2
-            }
+        }
+
+        //RIGHTBAR
+
+        .rightbar{
+            position: sticky;
+            top: 10vh;
+            display: flex;
+            flex-direction: column;
+            gap: 2vh;
         }
 
         //SINGLE
