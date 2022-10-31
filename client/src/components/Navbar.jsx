@@ -2,7 +2,9 @@ import React from 'react'
 import { useContext } from 'react'
 import {Link} from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
-import Logo from "../img/Logo.png"
+import Logo from "../img/logo.png"
+import search from "../img/search-icon.png"
+import TextField from "@mui/material/TextField";
 import SearchIcon from '@mui/icons-material/Search';
 
 const Navbar = () => {
@@ -18,9 +20,13 @@ const Navbar = () => {
           </Link>
         </div>
         
-   
+        
 
         <div className="links">
+          <div className='SearchBar'>
+          <input type="text" class="search-hover" name="" placeholder="Search Here" />
+          <button><img src={search} alt="" /></button>
+          </div>
           <span>{currentUser?.username}</span>
           {currentUser ? (
             <span onClick={logout}>Logout</span>
