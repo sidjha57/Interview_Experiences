@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect, useReducer } from "react";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import {filterReducer, INITIAL_STATE} from "./filters";
 import axios from "axios";
 
 

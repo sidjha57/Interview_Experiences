@@ -21,7 +21,7 @@ const Navbar = () => {
    
 
         <div className="links">
-          <span>{currentUser?.username}</span>
+          <span>{currentUser?.name}</span>
           {currentUser ? (
             <span onClick={logout}>Logout</span>
           ) : (

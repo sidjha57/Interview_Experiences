@@ -5,7 +5,7 @@ import axios from "axios"
 const Register = () => {
   // always initialize the useState
   const [inputs, setInputs] = useState({
-    username:"",
+    password:"",
     email:"",
     name: "",
   });
@@ -24,8 +24,9 @@ const Register = () => {
     try{
 
       const res = await axios.post("/auth/register", inputs);
+      console.log(res);
+
       navigate("/login");
-      // console.log(res);
     }catch(err){
       setError(err.response.data);
       console.log(err);
@@ -37,7 +38,7 @@ const Register = () => {
     <div className='auth'>
       <h1>Register</h1>
       <form>
-        <input type='text' placeholder='username' name='username' onChange={handleChange}/>
+        <input type='text' placeholder='name' name='name' onChange={handleChange}/>
         <input type='email' placeholder='email' name='email' onChange={handleChange} />
         <input type='password' placeholder='password' name='password' onChange={handleChange}/>
         <button onClick={handleSubmit}>Register</button>
