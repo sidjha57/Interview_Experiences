@@ -629,3 +629,50 @@ $lightGreen: #b9e7e7;
         }
     }
 }
+
+
+.searchbar{
+
+    textarea:focus, input:focus{
+        outline: none;
+    }
+    &:focus-within {
+        border: 1.5px solid #00468C;
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 50vw;
+    border-radius: 100px;
+    height: 2.5rem;
+    background-color: #b9e7e7;
+
+    input{
+        width: 90%;
+        border: none;
+        height: 2.5rem;
+        margin: 0;
+        padding: 0;
+        
+        background-color: #b9e7e7;
+        border-radius: 100px 0px 0px 100px;
+        margin-left: 2rem;
+
+        
+    }
+
+    img{
+        cursor: pointer;
+        height: 60%;
+        margin: 20px;
+
+        &:active{
+            filter: invert(1);
+        }
+    }
+
+    
+    
+}
+

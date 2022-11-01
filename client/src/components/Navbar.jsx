@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import {Link} from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 import Logo from "../img/Logo.png"
-import SearchIcon from '@mui/icons-material/Search';
+import search from "../img/search.png"
 
 const Navbar = () => {
 
@@ -18,7 +18,11 @@ const Navbar = () => {
           </Link>
         </div>
         
-   
+        <div className="searchbar">
+          <input type="text" placeholder='Search..' 
+          />
+          <img src={search} alt="Search" />
+        </div>
 
         <div className="links">
           <span>{currentUser?.name}</span>
