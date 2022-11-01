@@ -632,14 +632,7 @@ $lightGreen: #b9e7e7;
 
 
 .searchbar{
-
-    textarea:focus, input:focus{
-        outline: none;
-    }
-    &:focus-within {
-        border: 1.5px solid #00468C;
-    }
-
+    
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -648,6 +641,13 @@ $lightGreen: #b9e7e7;
     height: 2.5rem;
     background-color: #b9e7e7;
 
+    textarea:focus, input:focus{
+        outline: none;
+    }
+
+    &:focus-within {
+        border: 1.5px solid #00468C;
+    }
     input{
         width: 90%;
         border: none;
@@ -658,8 +658,6 @@ $lightGreen: #b9e7e7;
         background-color: #b9e7e7;
         border-radius: 100px 0px 0px 100px;
         margin-left: 2rem;
-
-        
     }
 
     img{
