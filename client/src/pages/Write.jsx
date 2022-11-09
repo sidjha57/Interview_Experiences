@@ -13,20 +13,21 @@ const Write = () => {
   const state = useLocation().state;
   const [error, setError] = useState("");
   const [values, setValues] = useState({
-    role: "",
-    company: "",
-    desc: null,
-    ctc: 0,
-    college: "",
-    type: "oncampus",
-    experience: "positive",
-    status: "accepted",
-    level: "easy",
-    cat: "",
-    img: "",
-    date: "",
+    role: state?.role ||  "",
+    company: state?.company || "",
+    desc: state?.desc || null,
+    ctc: state?.ctc || 0,
+    college: state?.college || "",
+    type: state?.type || "On Campus",
+    experience: state?.experience || "Positive Experience",
+    status: state?.status || "Accepted Offer",
+    level: state?.level || "Easy Level",
+    cat: state?.cat || "",
+    img: state?.img || "",
+    date: state?.date || "",
   });
 
+ 
   const handleChange = e => {
     setValues(prev =>({...prev, [e.target.name]: e.target.value})) // this updates only the object value which is changed
   };
@@ -39,7 +40,7 @@ const Write = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      console.log(values);
+      // console.log(values);
       const res = await axios.post("/posts/", {...values});
       // console.log(res);
       navigate("/");
@@ -50,15 +51,11 @@ const Write = () => {
     }
   }
 
-//  console.log(desc);
-// console.log(error);
-  // console.log(Editor);
-  // console.log(values)
   return (
     <div className="add">
       <div className="content">
-        <input type="text" placeholder="Role Offered" onChange={handleChange} name="role"/>
-        <input type="text" placeholder="Company Name" onChange={handleChange} name="company"/>
+        <input type="text" placeholder="Role Offered" value={values.role} onChange={handleChange} name="role"/>
+        <input type="text" placeholder="Company Name" value={values.company} onChange={handleChange} name="company"/>
         <div className="editorContainer" name="desc">
           {/* <Editor /> */}
           <EditorToolbar />
@@ -96,22 +93,22 @@ const Write = () => {
           <h1>Details</h1>
           <span><b>CTC Offered</b></span>
           <div className="ctc">
-            <input type="number" placeholder="CTC in LPA"  onChange={handleChange} name="ctc"/>
+            <input type="number" placeholder="CTC in LPA" value={values.ctc} onChange={handleChange} name="ctc"/>
           </div>
           <span><b>College Name</b></span>
           <div className="college">
-            <input type="text" placeholder="Sardar Patel College Of Engineering" onChange={handleChange} name="college"/>
+            <input type="text" placeholder="SPCE" value={values.college} onChange={handleChange} name="college"/>
           </div>
           <span><b>Type Of Placement</b></span>
           <div className="type">
-            <select name="type" id="placement" className="type"onChange={handleChange} >
+            <select name="type" id="placement" value={values.type} className="type"onChange={handleChange} >
               <option value="On Campus">On Campus</option>
               <option value="Off Campus">Off Campus</option>
             </select>
           </div>
           <span><b>How was your Experience?</b></span>
           <div className="experience">
-            <select name="experience" id="experience" className="experience"onChange={handleChange} >
+            <select name="experience" id="experience" value= {values.experience} className="experience"onChange={handleChange} >
               <option value="Positive Experience">Positive</option>
               <option value="Neutral Experience">Neutral</option>
               <option value="Negative Experience">Negative</option>
@@ -119,7 +116,7 @@ const Write = () => {
           </div>
           <span><b>Offer Status</b></span>
           <div className="status">
-            <select name="status" id="status" className="status"onChange={handleChange}>
+            <select name="status" id="status" value={values.status} className="status"onChange={handleChange}>
               <option value="Accepted Offer">Accepted Offer</option>
               <option value="No Offer">No Offer</option>
               <option value="Rejected Offer">Rejected Offer</option>
@@ -127,7 +124,7 @@ const Write = () => {
           </div>
           <span><b>Interview Level</b></span>
           <div className="status">
-            <select name="level" id="level" className="level"onChange={handleChange} >
+            <select name="level" id="level" value={values.level} className="level"onChange={handleChange} >
               <option value="Easy Level">Easy</option>
               <option value="Average Level">Average</option>
               <option value="Difficult Level">Difficult</option>

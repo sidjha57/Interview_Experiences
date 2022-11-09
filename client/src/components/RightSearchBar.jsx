@@ -266,6 +266,26 @@ export default function RightSearchBar() {
             }}
       />
 
+    <Autocomplete
+          sx={{ width: "20vw" }}
+          id="custom-autocomplete"
+          options={values.status}
+          onChange={(event,value) => handleSelect(event,value?.status,"status")}
+          isOptionEqualToValue={(option, value) => option.status === value.status}
+          getOptionLabel={(option) => `${option.status}`} //filter value
+          ListboxProps={{ sx: root }}
+          renderInput={(params) => {
+            return (
+              <TextField
+              {...params}
+              variant="standard"
+              label="Status"
+              sx={textfield}
+              />
+              );
+            }}
+      />
+
     </div>
     
   );

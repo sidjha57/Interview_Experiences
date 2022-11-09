@@ -1,17 +1,29 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import ReactQuill from 'react-quill';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import RightSearchBar from '../components/RightSearchBar';
 import Accepted from '../img/icons/Accepted';
 import Decline from '../img/icons/Decline';
 import Neutral from '../img/icons/Neutral';
 import moment from "moment";
 
+function removeTags(str) {
+  if ((str===null) || (str===''))
+      return false;
+  else
+      str = str.toString();
+        
+  // Regular expression to identify HTML tags in 
+  // the input string. Replacing the identified 
+  // HTML tag with a null string.
+  return str.replace( /(<([^>]+)>)/ig, '');
+}
 
 const Home = () => {
 
   const [posts, setPosts] = useState([])
+  const navigate = useNavigate();
   
   const filter = useLocation().search;
   const fetchData = async ()=>{
@@ -22,7 +34,6 @@ const Home = () => {
       console.log(err);
     }
   };
-
   useEffect(()=>{
     fetchData();
   },[filter])
@@ -30,6 +41,10 @@ const Home = () => {
   function getDate (date) {
     const d = new Date(date);
     return d;
+  }
+
+  const handleClick = (id) => {
+    navigate(`/post/${id}`)
   }
 
   return (
@@ -54,11 +69,11 @@ const Home = () => {
 
                 <div className="info">
                   <div className="status">
-                    {post.status === "accepted" ? (
+                    {post.status === "Accepted Offer" ? (
                       <>
                         <Accepted /> <label>Accepted Offer</label>
                       </>
-                    ) : post.status === "rejected" ? (
+                    ) : post.status === "Rejected Offer" ? (
                       <>
                         <Decline />
                         <label>Rejected Offer</label>
@@ -72,11 +87,11 @@ const Home = () => {
                   </div>
 
                   <div className="status">
-                    {post.experience === "positive" ? (
+                    {post.experience === "Positive Experience" ? (
                       <>
                         <Accepted /> <label>Postive Experience</label>
                       </>
-                    ) : post.experience === "negative" ? (
+                    ) : post.experience === "Negative Experience" ? (
                       <>
                         <Decline />
                         <label>Negative Experience</label>
@@ -90,11 +105,11 @@ const Home = () => {
                   </div>
 
                   <div className="status">
-                    {post.level === "easy" ? (
+                    {post.level === "Easy Level" ? (
                       <>
                         <Accepted /> <label>Easy Interview</label>
                       </>
-                    ) : post.level === "difficult" ? (
+                    ) : post.level === "Difficult Level" ? (
                       <>
                         <Decline />
                         <label>Difficult Interview</label>
@@ -108,15 +123,24 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="desc">
-                  <ReactQuill
+                  <p>
+                    {
+                      removeTags(post.desc)
+                    }
+                  </p>
+                  {/* <ReactQuill
                     value={post.desc}
                     readOnly={true}
                     theme={"bubble"}
                     
-                  />
+                  /> */}
                 </div>
                 <div className="last">
+
+                <Link className="link" to={`/post/${post.id}`}>
+
                   <button>Read More</button>
+                </Link>
                   <span>
                     {
                       moment(getDate(post.date)).format('LL')

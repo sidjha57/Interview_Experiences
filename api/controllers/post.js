@@ -4,9 +4,33 @@ import { response } from "express";
 
 export const getPosts = (req,res) => {
     
-    const q = "SELECT * FROM posts p WHERE p.college LIKE ? AND p.role LIKE ? AND p.company LIKE ? AND p.cat LIKE ? AND p.type LIKE ? AND p.experience LIKE ? AND p.status LIKE ? AND p.level LIKE ? ORDER BY p.date desc";
+    const q = `
+    SELECT * 
+    FROM posts p 
+    WHERE ( 
+            p.college LIKE ? AND 
+            p.role LIKE ? AND 
+            p.company LIKE ? AND 
+            p.cat LIKE ? AND 
+            p.type LIKE ? AND 
+            p.experience LIKE ? AND 
+            p.status LIKE ? AND 
+            p.level LIKE ?
+          ) 
+            AND 
+          (
+            p.college LIKE ? OR 
+            p.role LIKE ? OR 
+            p.company LIKE ? OR 
+            p.cat LIKE ? OR 
+            p.type LIKE ? OR 
+            p.experience LIKE ? OR 
+            p.status LIKE ? OR 
+            p.level LIKE ?
+          )  
+    ORDER BY p.date desc`;
 
-      const values = [
+      const Filtervalues = [
         req.query.college ? req.query.college : "%",
         req.query.role ? req.query.role : "%",
         req.query.company ? req.query.company : "%",
@@ -16,9 +40,23 @@ export const getPosts = (req,res) => {
         req.query.status ? req.query.status : "%",
         req.query.level ? req.query.level : "%",
       ]
+
+      const Searchvalues = [
+        req.query.search ? `%${req.query.search}%` : "%",
+        req.query.search ? `%${req.query.search}%` : "%",
+        req.query.search ? `%${req.query.search}%` : "%",
+        req.query.search ? `%${req.query.search}%` : "%",
+        req.query.search ? `%${req.query.search}%` : "%",
+        req.query.search ? `%${req.query.search}%` : "%",
+        req.query.search ? `%${req.query.search}%` : "%",
+        req.query.search ? `%${req.query.search}%` : "%",
+      ]
+
       console.log(req.query);
-      console.log(values);
-      db.query(q,[...values], (err,data)=> {
+      console.log(Filtervalues);
+      console.log(Searchvalues);
+      db.query(q,[...Filtervalues, ...Searchvalues], (err,data)=> {
+        // console.log(res);
         if (err) return res.status(500).send(err);
 
         return res.status(200).json(data);
@@ -28,7 +66,7 @@ export const getPosts = (req,res) => {
 export const filterPost = (req,res) => {
   console.log(req.query)
   const values = [
-    req.query.college ? req.query.college : "%",
+    req.query.college ? req.query.college  : "%",
     req.query.role ? req.query.role : "%",
     req.query.company ? req.query.company : "%",
     req.query.cat ? req.query.cat : "%",

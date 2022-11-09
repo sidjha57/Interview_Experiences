@@ -10,6 +10,8 @@ import axios from 'axios'
 import { AuthContext } from '../context/AuthContext'
 import Avatar from "../img/avatar.jpeg"
 import ReactQuill from 'react-quill'
+import moment from "moment";
+
 
 
 
@@ -54,7 +56,10 @@ const Single = () => {
     }
   }
   
- 
+  function getDate (date) {
+    const d = new Date(date);
+    return d;
+  }
 
   // console.log(error);
   return (
@@ -65,10 +70,10 @@ const Single = () => {
           <img src={post.userImg ? post.userImg : Avatar} alt="" />
           <div className="info">
             <span>{post.name}</span>
-            <p>{post.date}</p>
+            <p>{moment(getDate(post.date)).format('LL')}</p>
           </div>
           <div className="edit">
-            <Link to={`/write?edit=${post.id}`} state={post}>
+            <Link to={`/write?edit=${postId}`} state={post}>
               <img src={Edit} alt="" />
             </Link>
 
@@ -91,11 +96,11 @@ const Single = () => {
         </div>
         <div className="info">
           <div className="status">
-            {post.status === "Accepted" ? (
+            {post.status === "Accepted Offer" ? (
               <>
                 <Accepted /> <label>Accepted Offer</label>
               </>
-            ) : post.status === "Rejected" ? (
+            ) : post.status === "Rejected Offer" ? (
               <>
                 <Decline />
                 <label>Rejected Offer</label>
@@ -109,11 +114,11 @@ const Single = () => {
           </div>
 
           <div className="status">
-            {post.experience === "Positive" ? (
+            {post.experience === "Positive Experience" ? (
               <>
                 <Accepted /> <label>Postive Experience</label>
               </>
-            ) : post.experience === "Negative" ? (
+            ) : post.experience === "Negative Experience" ? (
               <>
                 <Decline />
                 <label>Negative Experience</label>
@@ -127,11 +132,11 @@ const Single = () => {
           </div>
 
           <div className="status">
-            {post.level === "Easy" ? (
+            {post.level === "Easy Level" ? (
               <>
                 <Accepted /> <label>Easy Interview</label>
               </>
-            ) : post.level === "Difficult" ? (
+            ) : post.level === "Difficult Level" ? (
               <>
                 <Decline />
                 <label>Difficult Interview</label>
